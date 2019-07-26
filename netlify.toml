@@ -1,0 +1,6 @@
+[permalinks]
+    post = "/:year/:month/:day/:slug/"
+
+[[redirects]]
+  from = "/quiz"
+  to = "/"
