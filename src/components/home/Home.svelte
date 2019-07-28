@@ -4,9 +4,18 @@
   let questionJSON = ''
   let takeQuizButton = 0
   let freezeScoreboard = 0
+  let startGame = 0
 
   $: message = ''
   $: JSONmessage = ''
+
+  let startGameConf = database.ref('app/start_game')
+  startGameConf.on('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+      let childData = childSnapshot.val()
+      startGame = childData
+    }) 
+  })
 
   let takeQuizButtonConf = database.ref('app/take_quiz_button')
   takeQuizButtonConf.on('value', function(snapshot) {
@@ -78,6 +87,10 @@
 
   function handleQuizButton() {
     database.ref('app/take_quiz_button').set({ value: takeQuizButton})
+  }
+
+  function handleStartGame() {
+    database.ref('app/start_game').set({ value: startGame})
   }
 
 </script>
@@ -165,9 +178,13 @@
 
     <label>
       <input type="checkbox" on:change={handleQuizButton} bind:checked={takeQuizButton}> Take Quiz Button
+    </label><br><br>
+
+    <label>
+      <input type="checkbox" on:change={handleStartGame} bind:checked={startGame}> Start Game ?
     </label>
 
-    
+    <br>
     <h4>Reset Scoreboard</h4>
     <div class="flex">
       <input class="custom-input" bind:value={token} type="password" placeholder="TOKEN" />
